@@ -1,59 +1,338 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Alvario — Backend API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Backend d'une plateforme e-commerce développée avec **Laravel** et **MySQL**.
 
-## About Laravel
+L'objectif du projet est de fournir une API REST permettant de gérer les produits, catégories, variantes, utilisateurs et commandes d'une boutique en ligne.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🚀 Technologies utilisées
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+* **Laravel 12**
+* **PHP 8.2+**
+* **MySQL / MariaDB**
+* **Laravel Sanctum**
+* **REST API**
+* **Postman**
+* **Git & GitHub**
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## 📌 Fonctionnalités
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Gestion des catégories
 
-## Laravel Sponsors
+* Créer une catégorie
+* Afficher toutes les catégories
+* Afficher une catégorie
+* Modifier une catégorie
+* Supprimer une catégorie
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Gestion des produits
 
-### Premium Partners
+* Créer un produit
+* Afficher les produits
+* Afficher un produit
+* Modifier un produit
+* Supprimer un produit
+* Gestion du stock
+* Gestion du prix et de l'ancien prix
+* Association avec une catégorie
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### Gestion des images
 
-## Contributing
+* Ajouter une image à un produit
+* Afficher les images d'un produit
+* Modifier une image
+* Supprimer une image
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Gestion des variantes
 
-## Code of Conduct
+* Ajouter une variante à un produit
+* Gérer la taille
+* Gérer la couleur
+* Gérer le stock des variantes
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Gestion des utilisateurs
 
-## Security Vulnerabilities
+* Inscription
+* Connexion
+* Déconnexion
+* Gestion des rôles : `client` / `admin`
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Gestion des commandes
 
-## License
+* Créer une commande
+* Consulter les commandes
+* Gérer les informations du client
+* Gérer le total de la commande
+* Gérer le statut
+* Mode de paiement : paiement à la livraison
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## 🗄️ Structure principale de la base de données
+
+Le projet utilise plusieurs tables principales :
+
+* `utilisateurs`
+* `categories`
+* `produits`
+* `images_produit`
+* `variantes_produit`
+* `commandes`
+* `articles_commande`
+
+### Relations principales
+
+```text
+Categorie
+   │
+   └── Produit
+          │
+          ├── ImageProduit
+          │
+          └── VarianteProduit
+
+Utilisateur
+   │
+   └── Commande
+          │
+          └── ArticleCommande
+                  │
+                  └── Produit
+```
+
+---
+
+## ⚙️ Installation
+
+### 1. Cloner le projet
+
+```bash
+git clone https://github.com/mohamedamine-dev-fullstack/alvario-api-backend.git
+```
+
+Puis :
+
+```bash
+cd alvario-api-backend
+```
+
+### 2. Installer les dépendances
+
+```bash
+composer install
+```
+
+### 3. Créer le fichier `.env`
+
+```bash
+cp .env.example .env
+```
+
+Sous Windows, vous pouvez également copier `.env.example` manuellement et le renommer en `.env`.
+
+### 4. Générer la clé Laravel
+
+```bash
+php artisan key:generate
+```
+
+### 5. Configurer la base de données
+
+Dans le fichier `.env` :
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=alvario
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+Adaptez les informations selon votre configuration MySQL.
+
+### 6. Exécuter les migrations
+
+```bash
+php artisan migrate
+```
+
+### 7. Insérer les données de test
+
+```bash
+php artisan db:seed
+```
+
+### 8. Lancer le serveur
+
+```bash
+php artisan serve
+```
+
+L'API sera disponible sur :
+
+```text
+http://127.0.0.1:8000
+```
+
+---
+
+## 🔐 Authentification
+
+L'API utilise **Laravel Sanctum** pour l'authentification.
+
+### Connexion
+
+```http
+POST /api/login
+```
+
+### Déconnexion
+
+```http
+POST /api/logout
+```
+
+Les routes protégées nécessitent un token d'authentification.
+
+---
+
+## 🔗 Principales routes API
+
+### Categories
+
+```http
+GET     /api/categories
+POST    /api/categories
+GET     /api/categories/{id}
+PUT     /api/categories/{id}
+DELETE  /api/categories/{id}
+```
+
+### Produits
+
+```http
+GET     /api/produits
+POST    /api/produits
+GET     /api/produits/{id}
+PUT     /api/produits/{id}
+DELETE  /api/produits/{id}
+```
+
+### Images produit
+
+```http
+GET     /api/images-produit
+POST    /api/images-produit
+GET     /api/images-produit/{id}
+PUT     /api/images-produit/{id}
+DELETE  /api/images-produit/{id}
+```
+
+### Variantes produit
+
+```http
+GET     /api/variantes-produit
+POST    /api/variantes-produit
+GET     /api/variantes-produit/{id}
+PUT     /api/variantes-produit/{id}
+DELETE  /api/variantes-produit/{id}
+```
+
+---
+
+## 🧪 Tests avec Postman
+
+Les endpoints peuvent être testés avec **Postman**.
+
+Exemple :
+
+```http
+GET http://127.0.0.1:8000/api/categories
+```
+
+Réponse :
+
+```json
+[
+    {
+        "id": 1,
+        "nom": "Soins & Hygiène Homme",
+        "slug": "soins-hygiene-homme"
+    }
+]
+```
+
+---
+
+## 📂 Structure du projet
+
+```text
+alvario-api-backend/
+│
+├── app/
+│   ├── Http/
+│   │   └── Controllers/
+│   │
+│   └── Models/
+│
+├── database/
+│   ├── migrations/
+│   └── seeders/
+│
+├── routes/
+│   └── api.php
+│
+├── config/
+├── public/
+├── resources/
+├── storage/
+├── .env.example
+├── composer.json
+└── README.md
+```
+
+---
+
+## 📦 Catégories actuelles
+
+Le projet contient actuellement trois catégories :
+
+1. **Soins & Hygiène Homme**
+2. **Casquettes & Chapeaux**
+3. **Sous-vêtements Homme**
+
+---
+
+## 🎯 Objectif du projet
+
+Ce projet a été réalisé dans le but de mettre en pratique le développement d'une **API REST e-commerce** avec Laravel.
+
+Il permet également de travailler sur :
+
+* la conception d'une base de données relationnelle ;
+* les relations entre modèles Laravel ;
+* les opérations CRUD ;
+* l'authentification avec Sanctum ;
+* la gestion des commandes ;
+* les tests d'API avec Postman ;
+* la préparation d'un backend destiné à être connecté à un frontend.
+
+---
+
+## 👨‍💻 Auteur
+
+**Mohamed Amine Laktaoui**
+
+Développeur Web Full Stack Junior
+
+* GitHub : `mohamedamine-dev-fullstack`
+
+---
+
+## 📄 Licence
+
+Ce projet est un projet personnel réalisé à des fins d'apprentissage et de développement de compétences.
