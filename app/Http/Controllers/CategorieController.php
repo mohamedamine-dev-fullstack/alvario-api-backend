@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categorie;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
 class CategorieController extends Controller
@@ -14,7 +15,7 @@ class CategorieController extends Controller
         return response()->json($categories);
     }
 
-    public function show($id)
+    public function show(int $id)
     {
         $categorie = Categorie::find($id);
 
@@ -32,13 +33,15 @@ class CategorieController extends Controller
         $request->validate([
             'nom' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:categories,slug',
-            'image' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
 
         $categorie = Categorie::create([
             'nom' => $request->nom,
             'slug' => $request->slug,
-            'image' => $request->image,
+            'image' => $request->hasFile('image')
+                ? $request->file('image')->store('categories', 'public')
+                : null,
         ]);
 
         return response()->json([
@@ -47,7 +50,7 @@ class CategorieController extends Controller
         ], 201);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         $categorie = Categorie::find($id);
 
@@ -60,14 +63,29 @@ class CategorieController extends Controller
         $request->validate([
             'nom' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:categories,slug,' . $id,
-            'image' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
 
-        $categorie->update([
+        /*$categorie->update([
             'nom' => $request->nom,
             'slug' => $request->slug,
             'image' => $request->image,
-        ]);
+        ]);*/
+        $donnees = [
+            'nom' => $request->nom,
+            'slug' => $request->slug,
+        ];
+
+        if ($request->hasFile('image')) {
+            if ($categorie->image) {
+                Storage::disk('public')->delete($categorie->image);
+            }
+
+            $donnees['image'] = $request->file('image')
+                ->store('categories', 'public');
+        }
+
+        $categorie->update($donnees);
 
         return response()->json([
             'message' => 'Catégorie modifiée avec succès',
@@ -75,7 +93,7 @@ class CategorieController extends Controller
         ]);
     }
 
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $categorie = Categorie::find($id);
 

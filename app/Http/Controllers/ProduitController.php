@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Produit;
+use App\Models\ImageProduit;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
 class ProduitController extends Controller
@@ -14,7 +16,7 @@ class ProduitController extends Controller
         return response()->json($produits);
     }
 
-    public function show($id)
+    public function show(int $id)
     {
         $produit = Produit::with(['categorie', 'images', 'variantes'])->find($id);
 
@@ -38,6 +40,7 @@ class ProduitController extends Controller
             'ancien_prix' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'statut' => 'required|string|max:50',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
 
         $produit = Produit::create([
@@ -51,13 +54,22 @@ class ProduitController extends Controller
             'statut' => $request->statut,
         ]);
 
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('produits', 'public');
+
+            ImageProduit::create([
+                'produit_id' => $produit->id,
+                'image' => $path,
+            ]);
+        }
+
         return response()->json([
             'message' => 'Produit créé avec succès',
             'produit' => $produit
         ], 201);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         $produit = Produit::find($id);
 
@@ -76,6 +88,7 @@ class ProduitController extends Controller
             'ancien_prix' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'statut' => 'required|string|max:50',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
 
         $produit->update([
@@ -89,13 +102,35 @@ class ProduitController extends Controller
             'statut' => $request->statut,
         ]);
 
+        if ($request->hasFile('image')) {
+            $imageProduit = ImageProduit::where(
+                'produit_id',
+                $produit->id
+            )->first();
+
+            if ($imageProduit && $imageProduit->image) {
+                Storage::disk('public')->delete($imageProduit->image);
+            }
+
+            $path = $request->file('image')->store('produits', 'public');
+
+            if ($imageProduit) {
+                $imageProduit->update(['image' => $path]);
+            } else {
+                ImageProduit::create([
+                   'produit_id' => $produit->id,
+                   'image' => $path,
+                ]);
+            }
+        }
+
         return response()->json([
             'message' => 'Produit modifié avec succès',
             'produit' => $produit
         ]);
     }
 
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $produit = Produit::find($id);
 
